@@ -11,7 +11,7 @@ import java.net.UnknownHostException;
 @AllArgsConstructor
 public class Address implements Serializable {
 
-    public static final String DEFAULT_PROTOCOL = "http";
+    public static final String DEFAULT_PROTOCOL = "rmi";
 
     private final String ip;
 
@@ -19,10 +19,12 @@ public class Address implements Serializable {
 
     private final String protocol;
 
+
     public Address(String ip,int port) {
         this.ip = ip;
         this.port = port;
         this.protocol = DEFAULT_PROTOCOL;
+
     }
 
     public static Address getMyAddress(int port) {

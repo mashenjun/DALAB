@@ -3,23 +3,14 @@ package Register;
 import Process.Address;
 import lombok.Getter;
 
-import javax.management.remote.JMXConnectorServer;
-import javax.management.remote.JMXConnectorServerFactory;
-import javax.management.remote.JMXServiceURL;
-import java.io.IOException;
-import java.lang.management.ManagementFactory;
-import java.net.MalformedURLException;
-import java.rmi.NoSuchObjectException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.rmi.server.UnicastRemoteObject;
 import java.util.Arrays;
-import java.util.HashMap;
 
 public class Register implements Runnable {
 
-    public static final int PORT = 1234;
+    public static final int PORT = 2000;
 
     @Getter
     private final Registry registry;
@@ -64,34 +55,34 @@ public class Register implements Runnable {
         }
     }
 
-    public void disconnect() {
-        JMXServiceURL url;
-        String urlString = "service:jmx:rmi://localhost:" + (address.getPort() + 1) + "/jndi/rmi://:" + address.getPort() + "/jmxrmi";
-        try {
-            url = new JMXServiceURL(urlString);
-        } catch (MalformedURLException e) {
-            throw new RuntimeException("Malformed service url created " + urlString, e);
-        }
-
-        JMXConnectorServer connector;
-        try {
-            connector = JMXConnectorServerFactory.newJMXConnectorServer(url,
-                    new HashMap<>(),
-                    ManagementFactory.getPlatformMBeanServer());
-            // close the connection
-            if (connector != null) {
-                connector.stop();
-            }
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            UnicastRemoteObject.unexportObject(registry, true);
-        }
-        catch (NoSuchObjectException e) {
-            e.printStackTrace();
-        }
-    }
+//    public void disconnect() {
+//        JMXServiceURL url;
+//        String urlString = "service:jmx:rmi://localhost:" + (address.getPort() + 1) + "/jndi/rmi://:" + address.getPort() + "/jmxrmi";
+//        try {
+//            url = new JMXServiceURL(urlString);
+//        } catch (MalformedURLException e) {
+//            throw new RuntimeException("Malformed service url created " + urlString, e);
+//        }
+//
+//        JMXConnectorServer connector;
+//        try {
+//            connector = JMXConnectorServerFactory.newJMXConnectorServer(url,
+//                    new HashMap<>(),
+//                    ManagementFactory.getPlatformMBeanServer());
+//            // close the connection
+//            if (connector != null) {
+//                connector.stop();
+//            }
+//        }
+//        catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        try {
+//            UnicastRemoteObject.unexportObject(registry, true);
+//        }
+//        catch (NoSuchObjectException e) {
+//            e.printStackTrace();
+//        }
+//    }
 }
