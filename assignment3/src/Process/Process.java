@@ -27,7 +27,7 @@ public class Process extends UnicastRemoteObject implements ProcessInterface, Ru
     private LinkedList<String> links=new LinkedList<String>();
     private Address address;
     private Message msg;
-    private AtomicInteger MeaageReceived;
+    private AtomicInteger MessageReceived;
 
     public static void main(String[] args) {
         try {
@@ -42,7 +42,7 @@ public class Process extends UnicastRemoteObject implements ProcessInterface, Ru
         round=1;
         decided=false;
         this.address=new Address(Inet4Address.getLocalHost().getHostAddress(),2000);
-        this.MeaageReceived=new AtomicInteger();
+        this.MessageReceived=new AtomicInteger();
 
     }
 
@@ -62,7 +62,6 @@ public class Process extends UnicastRemoteObject implements ProcessInterface, Ru
                 this.links.add(name);
 
             }
-
 
             StringBuffer namegen = new StringBuffer("rmi://localhost:2000/");
             namegen.append("Process");
@@ -85,7 +84,7 @@ public class Process extends UnicastRemoteObject implements ProcessInterface, Ru
             this.register(this);
             Message msg =new Message(MessageType.notification,this.round,this.value);
             while(!decided){
-                this.notifacation();
+                this.notifacation(msg);
                 this.proposal();
                 this.decision();
             }
@@ -110,18 +109,20 @@ public class Process extends UnicastRemoteObject implements ProcessInterface, Ru
         this.links.add(name);
     }
 
+    // initial some parameter when the alg start
     @Override
     public synchronized void setF(int number) throws RemoteException {
         this.f=number;
     }
 
+    // the value of MessageReceived listen the message number
     @Override
     public synchronized void receive(Message msg) throws RemoteException {
-        this.MeaageReceived.incrementAndGet();
+        this.MessageReceived.incrementAndGet();
     }
 
 
-
+    // broadcast the message throw the network
     public void broadcast(Message msg) throws RemoteException, NotBoundException {
         for ( String target :this.links){
             send(msg,target);
@@ -134,8 +135,12 @@ public class Process extends UnicastRemoteObject implements ProcessInterface, Ru
         nsi.receive(msg);
     }
 
-    public void notifacation () throws RemoteException, NotBoundException {
+    // three phases, will be implemented in Loyal Process
+    public void notifacation (Message msg) throws RemoteException, NotBoundException {
         this.broadcast(msg);
+        while (){
+            
+        }
     }
 
     public void proposal () {
